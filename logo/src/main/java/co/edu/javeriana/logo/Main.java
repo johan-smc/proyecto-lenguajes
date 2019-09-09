@@ -59,6 +59,7 @@ public class Main {
 		turtle.forward(200);
 		turtle.right(90);
 		turtle.color(0, 255, 255, 255);
+		
 	}
 
 	private static App<World, Turtle> initTurtle() {

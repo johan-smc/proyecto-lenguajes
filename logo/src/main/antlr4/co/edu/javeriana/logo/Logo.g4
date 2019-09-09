@@ -1,5 +1,11 @@
 grammar Logo;
 
+@parser::header {
+	import java.util.Map;
+	import co.edo.javeriana.logo.ast.*;
+	import java.util.List;
+	import java.util.ArrayList;
+}
 
 @parser::members {
 
@@ -14,22 +20,70 @@ public LogoParser(TokenStream input, Turtle turtle) {
 
 
 program:
-	sentence* 
+	{
+		List<ASTNode> body = new ArrayList<>();
+	}
+	(sentence {body.add($sentence.node);})* 
+	{
+		for( ASTNode n : body ){
+			
+			n.execute(turtle);
+		}
+	}
 ;
 
-sentence: move | rotate | set_color;
+sentence returns [ASTNode node]:
+ 	move {$node = $move.node;} 
+ 	| 
+ 	rotate {$node = $rotate.node;}
+ 	| 
+ 	set_color {$node = $set_color.node;}
+	;
 
-move: move_forw | move_back;
+move returns [ASTNode node]:
+	move_forw {$node = $move_forw.node;} 
+	|
+	move_back {$node = $move_back.node;}
+	;
 
-move_forw: MOVE_FORW NUMBER;
-move_back: MOVE_BACK NUMBER;
+move_forw returns [ASTNode node]:
+	MOVE_FORW expression
+	{$node = new MoveForw($expression.node);}
+	;
+	
+move_back returns [ASTNode node]:
+	MOVE_BACK expression
+	{$node = new MoveBack($expression.node);}
+	;
 
-rotate: rot_l | rot_r;
+rotate returns [ASTNode node]:
+	rot_l {$node = $rot_l.node;} 
+	|
+	rot_r {$node = $rot_r.node;}
+	;
 
-rot_l: ROT_L NUMBER;
-rot_r: ROT_R NUMBER;
+rot_l returns [ASTNode node]:
+	ROT_L expression
+	{$node = new RotL($expression.node);}
+	;
+	
+rot_r returns [ASTNode node]:
+	ROT_R expression
+	{$node = new RotR($expression.node);}
+	;
 
-set_color: SET_COLOR NUMBER COMMA  NUMBER COMMA NUMBER COMMA NUMBER;
+set_color returns [ASTNode node]:
+	SET_COLOR red = expression COMMA  green = expression COMMA blue = expression COMMA alpha = expression
+	{$node = new SetColor($red.node, $green.node, $blue.node, $alpha.node);}
+	;
+
+expression returns [ASTNode node]:
+	terms {$node = $terms.node;}
+	; 
+
+terms returns [ASTNode node]: 
+	NUMBER {$node = new Constant(Float.parseFloat($NUMBER.text));}
+	;
 
 
 LET: 'let';
