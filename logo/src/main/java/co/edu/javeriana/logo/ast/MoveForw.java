@@ -1,19 +1,19 @@
-package co.edo.javeriana.logo.ast;
+package co.edu.javeriana.logo.ast;
 
 import co.edu.javeriana.logo.Turtle;
 
-public class MoveBack implements ASTNode {
+public class MoveForw implements ASTNode {
 
 	private ASTNode amount;
 	
-	public MoveBack(ASTNode amount) {
+	public MoveForw(ASTNode amount) {
 		super();
 		this.amount = amount;
 	}
-
+	
 	@Override
 	public Object execute(Turtle turtle) {
-		turtle.backwards((float)amount.execute(turtle));
+		turtle.forward((float)amount.execute(turtle));
 		return null;
 	}
 

@@ -1,4 +1,4 @@
-package co.edo.javeriana.logo.ast;
+package co.edu.javeriana.logo.ast;
 
 import co.edu.javeriana.logo.Turtle;
 

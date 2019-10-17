@@ -1,19 +1,19 @@
-package co.edo.javeriana.logo.ast;
+package co.edu.javeriana.logo.ast;
 
 import co.edu.javeriana.logo.Turtle;
 
-public class RotL implements ASTNode {
+public class RotR implements ASTNode {
 
 	private ASTNode degrees;
 	
-	public RotL(ASTNode degrees) {
+	public RotR(ASTNode degrees) {
 		super();
 		this.degrees = degrees;
 	}
 	
 	@Override
 	public Object execute(Turtle turtle) {
-		turtle.left((float)degrees.execute(turtle));
+		turtle.right((float)degrees.execute(turtle));
 		return null;
 	}
 
