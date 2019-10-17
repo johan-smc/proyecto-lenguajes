@@ -223,6 +223,12 @@ println returns [ASTNode node]:
 	;
 
 
+expression returns [ASTNode node]:
+	condition {$node = $condition.node;}
+	|
+	expression_value {$node = $expression_value.node;}
+	;
+
 
 condition returns [ASTNode node]:
 	c1 = condition_comparation {$node = $c1.node;}
@@ -237,24 +243,24 @@ condition returns [ASTNode node]:
 	;
 
 condition_comparation returns [ASTNode node]:
-	e1 = expression {$node = $expression.node;}
+	e1 = expression_value {$node = $e1.node;}
 	(
-		GT e2 = expression {$node = new Greater($node, $e2.node);}
+		GT e2 = expression_value {$node = new Greater($node, $e2.node);}
 		|
-		LT e2 = expression {$node = new Less($node, $e2.node);}
+		LT e2 = expression_value {$node = new Less($node, $e2.node);}
 		|
-		GEQ e2 = expression {$node = new GreaterOrEquals($node, $e2.node);}
+		GEQ e2 = expression_value {$node = new GreaterOrEquals($node, $e2.node);}
 		|
-		LEQ e2 = expression {$node = new LessOrEquals($node, $e2.node);}
+		LEQ e2 = expression_value {$node = new LessOrEquals($node, $e2.node);}
 		|
-		EQ e2 = expression {$node = new Equals($node, $e2.node);}
+		EQ e2 = expression_value {$node = new Equals($node, $e2.node);}
 		|
-		NEQ e2 = expression {$node = new NotEquals($node, $e2.node);}
+		NEQ e2 = expression_value {$node = new NotEquals($node, $e2.node);}
 	)?
 	;
 
 
-expression returns [ASTNode node]:
+expression_value returns [ASTNode node]:
 	t1 = terms {$node = $terms.node;}
 	(
 		PLUS t2 = factor {$node = new Addition($node, $t2.node);}
@@ -263,8 +269,6 @@ expression returns [ASTNode node]:
 	)*
 	|
 	MINUS terms {$node = new Subtraction(new Constant(0.0f), $terms.node);}
-	|
-	condition {$node=$condition.node}
 	; 
 
 
@@ -281,11 +285,6 @@ terms returns [ASTNode node]:
 	PAR_OPEN expression PAR_CLOSE
 	{
 		$node = $expression.node;	
-	}
-	|
-	PAR_OPEN condition PAR_CLOSE
-	{
-		$node = $condition.node;
 	}
 	|
 	NUMBER {$node = new Constant(Float.parseFloat($NUMBER.text));}
