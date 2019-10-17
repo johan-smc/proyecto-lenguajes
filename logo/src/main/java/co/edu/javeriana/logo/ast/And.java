@@ -1,6 +1,7 @@
 package co.edu.javeriana.logo.ast;
 
 import co.edu.javeriana.logo.Turtle;
+import utils.SymbolTable;
 
 public class And implements ASTNode {
 
@@ -14,8 +15,8 @@ public class And implements ASTNode {
 	}
 	
 	@Override
-	public Object execute(Turtle turtle) {
-		return (boolean)condition1.execute(turtle) && (boolean)condition2.execute(turtle);
+	public Object execute(Turtle turtle, SymbolTable symbolTable) {
+		return (boolean)condition1.execute(turtle, symbolTable) && (boolean)condition2.execute(turtle, symbolTable);
 	}
 
 }

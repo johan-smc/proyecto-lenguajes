@@ -1,6 +1,7 @@
 package co.edu.javeriana.logo.ast;
 
 import co.edu.javeriana.logo.Turtle;
+import utils.SymbolTable;
 
 public class Constant implements ASTNode {
 
@@ -12,7 +13,7 @@ public class Constant implements ASTNode {
 	}
 
 	@Override
-	public Object execute(Turtle turtle) {
+	public Object execute(Turtle turtle, SymbolTable symbolTable) {
 		return value;
 	}
 

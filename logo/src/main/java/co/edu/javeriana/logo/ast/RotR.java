@@ -1,6 +1,7 @@
 package co.edu.javeriana.logo.ast;
 
 import co.edu.javeriana.logo.Turtle;
+import utils.SymbolTable;
 
 public class RotR implements ASTNode {
 
@@ -12,8 +13,8 @@ public class RotR implements ASTNode {
 	}
 	
 	@Override
-	public Object execute(Turtle turtle) {
-		turtle.right((float)degrees.execute(turtle));
+	public Object execute(Turtle turtle, SymbolTable symbolTable) {
+		turtle.right((float)degrees.execute(turtle, symbolTable));
 		return null;
 	}
 

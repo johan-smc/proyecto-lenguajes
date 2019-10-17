@@ -2,7 +2,8 @@ grammar Logo;
 
 @parser::header {
 	import java.util.Map;
-	import co.edo.javeriana.logo.ast.*;
+	import co.edu.javeriana.logo.ast.*;
+	import utils.*;
 	import java.util.List;
 	import java.util.ArrayList;
 }
@@ -10,6 +11,7 @@ grammar Logo;
 @parser::members {
 
 private Turtle turtle;
+private SymbolTable symbolTable = new SymbolTable();
 
 public LogoParser(TokenStream input, Turtle turtle) {
     this(input);
@@ -27,12 +29,14 @@ program:
 	{
 		for( ASTNode n : body ){
 			
-			n.execute(turtle);
+			n.execute(turtle, symbolTable);
 		}
 	}
 ;
 
 sentence returns [ASTNode node]:
+	var_assign {$node = $var_assign.node;}
+	|
  	move {$node = $move.node;} 
  	| 
  	rotate {$node = $rotate.node;}
@@ -45,46 +49,59 @@ sentence returns [ASTNode node]:
  	|
  	var_declaration {$node = $var_declaration.node;}
  	|
- 	var_assign {$node = $var_assign.node;}
- 	|
  	loop {$node = $loop.node;}
+ 	|
+ 	read {$node = $read.node;}
+ 	
 	;
 
 
 var_declaration returns [ASTNode node]:
 	LET ID 
-	{$node = new ;}
+	{$node = new VarDeclaration($ID.text);}
+	|
+	LET ID ASSIGN expression
+	{$node = new VarDeclaration($ID.text, $expression.node);}
 	;
 
 var_assign returns [ASTNode node]:
 	ID ASSIGN expression
-	{$node = new;}
+	{$node = new VarAssign($ID.text, $expression.node );}
 	;
 
 loop returns [ASTNode node]:
 	WHILE condition
-	{}
+	{
+		List<ASTNode> body = new ArrayList<ASTNode>();
+	}
 	DO
 	(
-		s1 = sentence {}
+		s1 = sentence {body.add($s1.node);}
 	)*
-	{}
+	{
+		$node = new While($condition.node, body);
+	}
 	END_WHILE
 	;
 
 conditional returns [ASTNode node]:
 	IF condition
-	{}
+	{
+		List<ASTNode> body = new ArrayList<ASTNode>();
+		List<ASTNode> elseBody = new ArrayList<ASTNode>();
+	}
 	THEN
 	(
-		s1 = sentence {}
+		s1 = sentence {body.add($s1.node);}
 		
 	)*
-	ELSE {}
+	ELSE 
 	(
-		s2 = sentence {}
+		s2 = sentence {body.add($s2.node);}
 	)*
-	{}
+	{
+		$node = new If($condition.node, body, elseBody);
+	}
 	END_IF
 	;
 
@@ -124,6 +141,11 @@ rot_r returns [ASTNode node]:
 set_color returns [ASTNode node]:
 	SET_COLOR red = expression COMMA  green = expression COMMA blue = expression COMMA alpha = expression
 	{$node = new SetColor($red.node, $green.node, $blue.node, $alpha.node);}
+	;
+
+read returns [ASTNode node]:
+	READ ID
+	{$node = new Read($ID.text);}
 	;
 
 println returns [ASTNode node]:
@@ -170,7 +192,7 @@ expression returns [ASTNode node]:
 		MINUS t2 = factor {$node = new Subtraction($node, $t2.node);}
 	)*
 	|
-	MINUS terms {$node = new Subtraction(0.0, $terms.node);}
+	MINUS terms {$node = new Subtraction(new Constant(0.0), $terms.node);}
 	; 
 
 
@@ -188,13 +210,13 @@ terms returns [ASTNode node]:
 	|
 	BOOL {$node = new Constant(Boolean.parseBoolean($BOOL.text));}
 	|
-	STRING {$node = new Constant(String.parseString($STRING.text));}
+	STRING{$node = new Constant(String.valueOf($STRING.text));}
 	|
 	ID {$node = new VarReference($ID.text);}
 	;
 
 
-ID: [A-Za-z][A-Za-z0-9]*;
+
 /// conditionals
 IF: 'if';
 THEN: 'then';
@@ -254,7 +276,10 @@ NUMBER
 
 BOOL: 'true' | 'false';
 
-STRING: '"' ('\\"' | .*?) '"';
+STRING: '"' ('\\"' | .)*? '"';
+
+ID: [A-Za-z][A-Za-z0-9_]*;
+
 
 
 WS

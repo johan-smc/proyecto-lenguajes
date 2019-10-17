@@ -1,3 +1,5 @@
+println 1
+
 move_forw 350
 rot_r 90
 move_forw 250
@@ -32,3 +34,18 @@ set_color 255,255,255,255
 move_forw 100
 rot_l 90
 move_back 100
+
+let a
+a = 0
+while a < 3 do
+	println a
+	a = a + 1
+end_while
+let b = "Finis\\"h"
+println b
+read b
+println b
+let c = 1.0
+println c-1.0
+
+

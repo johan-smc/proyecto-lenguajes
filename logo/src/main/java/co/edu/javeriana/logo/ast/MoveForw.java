@@ -1,6 +1,7 @@
 package co.edu.javeriana.logo.ast;
 
 import co.edu.javeriana.logo.Turtle;
+import utils.SymbolTable;
 
 public class MoveForw implements ASTNode {
 
@@ -12,8 +13,8 @@ public class MoveForw implements ASTNode {
 	}
 	
 	@Override
-	public Object execute(Turtle turtle) {
-		turtle.forward((float)amount.execute(turtle));
+	public Object execute(Turtle turtle, SymbolTable symbolTable) {
+		turtle.forward((float)amount.execute(turtle, symbolTable));
 		return null;
 	}
 

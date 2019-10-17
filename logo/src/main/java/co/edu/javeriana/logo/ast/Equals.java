@@ -1,6 +1,7 @@
 package co.edu.javeriana.logo.ast;
 
 import co.edu.javeriana.logo.Turtle;
+import utils.SymbolTable;
 
 public class Equals implements ASTNode {
 
@@ -13,8 +14,8 @@ public class Equals implements ASTNode {
 		this.operand2 = operand2;
 	}
 	@Override
-	public Object execute(Turtle turtle) {
-		return operand1.execute(turtle).equals(operand2.execute(turtle));
+	public Object execute(Turtle turtle, SymbolTable symbolTable) {
+		return operand1.execute(turtle, symbolTable).equals(operand2.execute(turtle, symbolTable));
 	}
 
 }

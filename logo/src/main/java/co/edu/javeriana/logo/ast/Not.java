@@ -3,18 +3,18 @@ package co.edu.javeriana.logo.ast;
 import co.edu.javeriana.logo.Turtle;
 import utils.SymbolTable;
 
-public class VarReference implements ASTNode {
+public class Not implements ASTNode {
 
-	private String name;
+	private ASTNode condition;
 	
-	public VarReference(String name) {
+	public Not(ASTNode condition) {
 		super();
-		this.name = name;
+		this.condition = condition;
 	}
 	
 	@Override
 	public Object execute(Turtle turtle, SymbolTable symbolTable) {
-		return symbolTable.get(this.name);
+		return !((boolean)this.condition.execute(turtle, symbolTable));
 	}
 
 }

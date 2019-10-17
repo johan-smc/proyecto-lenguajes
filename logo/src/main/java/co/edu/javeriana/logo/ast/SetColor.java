@@ -1,6 +1,7 @@
 package co.edu.javeriana.logo.ast;
 
 import co.edu.javeriana.logo.Turtle;
+import utils.SymbolTable;
 
 public class SetColor implements ASTNode {
 
@@ -22,12 +23,12 @@ public class SetColor implements ASTNode {
 
 
 	@Override
-	public Object execute(Turtle turtle) {
+	public Object execute(Turtle turtle, SymbolTable symbolTable) {
 		turtle.color(
-				(float)red.execute(turtle),
-				(float)green.execute(turtle),
-				(float)blue.execute(turtle),
-				(float)alpha.execute(turtle)
+				(float)red.execute(turtle, symbolTable),
+				(float)green.execute(turtle, symbolTable),
+				(float)blue.execute(turtle, symbolTable),
+				(float)alpha.execute(turtle, symbolTable)
 				);
 		return null;
 	}
