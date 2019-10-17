@@ -271,6 +271,8 @@ expression_value returns [ASTNode node]:
 	)*
 	|
 	MINUS terms {$node = new Subtraction(new Constant(0.0f), $terms.node);}
+	|
+	factor {$node = $factor.node;}
 	; 
 
 
