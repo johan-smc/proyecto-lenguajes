@@ -1,6 +1,5 @@
 package co.edu.javeriana.logo.ast;
 
-import java.lang.reflect.InvocationTargetException;
 import java.util.Scanner;
 
 import co.edu.javeriana.logo.Turtle;
@@ -9,6 +8,7 @@ import utils.SymbolTable;
 public class Read implements ASTNode {
 
 	private String name;
+	static final private Scanner sc = new Scanner(System.in);
 	
 	public Read(String name) {
 		super();
@@ -17,30 +17,23 @@ public class Read implements ASTNode {
 	
 	@Override
 	public Object execute(Turtle turtle, SymbolTable symbolTable) {
-		Scanner sc = new Scanner(System.in);
-		Class<? extends Object> toCast = symbolTable.get(name).getClass();
+		
+		
+		Object var = sc.nextLine();
+		
 		try {
-			symbolTable.assign(name, toCast.getConstructor(new Class[] {String.class}).newInstance(sc.next()));
-		} catch (InstantiationException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IllegalAccessException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IllegalArgumentException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (InvocationTargetException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (NoSuchMethodException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (SecurityException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			var = Float.valueOf((String)var) ;
+		} catch ( NumberFormatException number_e) {
+			try {
+				var = Boolean.valueOf((String)var) ;
+			} catch ( Exception e) {
+				
+			}
 		}
-		sc.close();
+		
+		
+		symbolTable.assign(name, var );
+		
 		return null;
 	}
 

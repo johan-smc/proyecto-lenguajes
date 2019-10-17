@@ -95,9 +95,9 @@ conditional returns [ASTNode node]:
 		s1 = sentence {body.add($s1.node);}
 		
 	)*
-	ELSE 
+	ELSE? 
 	(
-		s2 = sentence {body.add($s2.node);}
+		s2 = sentence {elseBody.add($s2.node);}
 	)*
 	{
 		$node = new If($condition.node, body, elseBody);
@@ -180,7 +180,7 @@ condition_comparation returns [ASTNode node]:
 		EQ e2 = expression {$node = new Equals($node, $e2.node);}
 		|
 		NEQ e2 = expression {$node = new NotEquals($node, $e2.node);}
-	)
+	)?
 	;
 
 
@@ -210,7 +210,10 @@ terms returns [ASTNode node]:
 	|
 	BOOL {$node = new Constant(Boolean.parseBoolean($BOOL.text));}
 	|
-	STRING{$node = new Constant(String.valueOf($STRING.text));}
+	STRING
+	{$node = new Constant(
+		org.antlr.v4.misc.CharSupport.getStringFromGrammarStringLiteral($STRING.text)
+	);}
 	|
 	ID {$node = new VarReference($ID.text);}
 	;
@@ -271,7 +274,7 @@ COMMA: ',';
 
 NUMBER
 :
-	[+-]?([0-9]*[.])?[0-9]+ 
+	([0-9]*[.])?[0-9]+ 
 ;
 
 BOOL: 'true' | 'false';

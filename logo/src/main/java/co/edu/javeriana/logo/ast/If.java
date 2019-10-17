@@ -22,7 +22,7 @@ public class If implements ASTNode {
 	@Override
 	public Object execute(Turtle turtle, SymbolTable symbolTable) {
 		symbolTable.subirNivel();
-		if( (boolean)condition.execute(turtle, symbolTable))
+		if( (boolean)condition.execute(turtle, symbolTable) )
 		{
 			for(ASTNode n: body){
 				n.execute(turtle, symbolTable);

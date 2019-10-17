@@ -41,11 +41,26 @@ while a < 3 do
 	println a
 	a = a + 1
 end_while
-let b = "Finis\\"h"
+let b = "Finis\"h"
 println b
 read b
 println b
 let c = 1.0
 println c-1.0
+println c-b
+read b
+println b
+let bo
+read bo
+println bo
+if bo then
+	println bo
+end_if
+
+if bo then 
+	println "entre1"
+else 
+	println "entre2"
+end_if 
 
 
