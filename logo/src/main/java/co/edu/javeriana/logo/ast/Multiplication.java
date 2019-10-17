@@ -1,6 +1,7 @@
 package co.edu.javeriana.logo.ast;
 
 import co.edu.javeriana.logo.Turtle;
+import utils.ListOfFunctions;
 import utils.SymbolTable;
 
 public class Multiplication implements ASTNode {
@@ -14,8 +15,8 @@ public class Multiplication implements ASTNode {
 		this.operand2 = operand2;
 	}
 	@Override
-	public Object execute(Turtle turtle, SymbolTable symbolTable) {
-		return (float)operand1.execute(turtle, symbolTable) * (float)operand2.execute(turtle, symbolTable);
+	public Object execute(Turtle turtle, SymbolTable symbolTable, ListOfFunctions listOfFunctions) throws Exception {
+		return (float)operand1.execute(turtle, symbolTable, listOfFunctions) * (float)operand2.execute(turtle, symbolTable, listOfFunctions);
 	}
 
 }

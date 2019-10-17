@@ -1,6 +1,7 @@
 package co.edu.javeriana.logo.ast;
 
 import co.edu.javeriana.logo.Turtle;
+import utils.ListOfFunctions;
 import utils.SymbolTable;
 
 public class VarAssign implements ASTNode {
@@ -16,8 +17,8 @@ public class VarAssign implements ASTNode {
 	}
 	
 	@Override
-	public Object execute(Turtle turtle, SymbolTable symbolTable) {
-		boolean found = symbolTable.assign(name, expression.execute(turtle, symbolTable));
+	public Object execute(Turtle turtle, SymbolTable symbolTable, ListOfFunctions listOfFunctions) throws Exception {
+		boolean found = symbolTable.assign(name, expression.execute(turtle, symbolTable, listOfFunctions));
 		if( !found )
 		{
 			// TODO - do error

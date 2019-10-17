@@ -1,4 +1,40 @@
+println 1.0+1.2
+println (1.0+1.2)
+
+println (1.1 < (2.2-10.0)) && true
+
 println 1
+
+let global = 1.1
+
+def miFuncion(param1, param2): 
+
+	println "Paramentros"
+	println param1
+	println param2
+	println "global"
+	println global
+	
+	println "Negativo"
+	let negativo = -9.0
+	println negativo
+	if "hola" == negativo then
+		println "Arreglar"
+	else
+		println "ok"
+	end_if
+	println "Salio"
+end_def
+
+
+miFuncion(1.1, "Hi")
+
+
+println "Voy a imprimir negativo"
+println negativo
+
+
+
 
 move_forw 350
 rot_r 90
@@ -41,7 +77,7 @@ while a < 3 do
 	println a
 	a = a + 1
 end_while
-let b = "Finis\"h"
+let b = "Finis\"h\n"
 println b
 read b
 println b
@@ -62,5 +98,6 @@ if bo then
 else 
 	println "entre2"
 end_if 
+
 
 

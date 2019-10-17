@@ -1,6 +1,7 @@
 package co.edu.javeriana.logo.ast;
 
 import co.edu.javeriana.logo.Turtle;
+import utils.ListOfFunctions;
 import utils.SymbolTable;
 
 public class VarDeclaration implements ASTNode {
@@ -21,11 +22,11 @@ public class VarDeclaration implements ASTNode {
 	}
 	
 	@Override
-	public Object execute(Turtle turtle, SymbolTable symbolTable) {
+	public Object execute(Turtle turtle, SymbolTable symbolTable, ListOfFunctions listOfFunctions) throws Exception {
 		Object value = null;
 		if( this.expression != null )
 		{
-			value = this.expression.execute(turtle, symbolTable);
+			value = this.expression.execute(turtle, symbolTable, listOfFunctions);
 		}
 		symbolTable.create(name, value);
 		return null;

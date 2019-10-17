@@ -12,6 +12,7 @@ grammar Logo;
 
 private Turtle turtle;
 private SymbolTable symbolTable = new SymbolTable();
+private ListOfFunctions listOfFunctions = new ListOfFunctions();
 
 public LogoParser(TokenStream input, Turtle turtle) {
     this(input);
@@ -28,8 +29,13 @@ program:
 	(sentence {body.add($sentence.node);})* 
 	{
 		for( ASTNode n : body ){
-			
-			n.execute(turtle, symbolTable);
+			try{
+				n.execute(turtle, symbolTable, listOfFunctions);
+			}catch (Exception e )
+			{
+				System.err.println(e.getMessage());
+			}
+		
 		}
 	}
 ;
@@ -52,9 +58,72 @@ sentence returns [ASTNode node]:
  	loop {$node = $loop.node;}
  	|
  	read {$node = $read.node;}
- 	
+ 	|
+ 	function_declaration {$node = $function_declaration.node;}
+ 	|
+ 	function_execution {$node = $function_execution.node;}
 	;
 
+
+function_declaration returns [ASTNode node]:
+	DEF name=ID
+	{
+		List<ASTNode> block = new ArrayList<ASTNode>();
+		List<String> params = new ArrayList<String>();
+	}
+	PAR_OPEN 
+	( 
+		(
+			p = ID
+			{
+				params.add($p.text);
+			}
+		)
+		(
+			COMMA
+			p1 = ID
+			{
+				params.add($p1.text);
+			}
+		)*
+		
+	)?
+	PAR_CLOSE COLON
+	(
+		s1 = sentence {block.add($s1.node);}
+	)*
+	END_DEF
+	{
+		$node = new FunctionSignature($name.text, params, block);
+	}
+	;
+
+function_execution returns [ASTNode node]:
+	name=ID
+	{
+		List<ASTNode> params = new ArrayList<ASTNode>();
+	}
+	PAR_OPEN 
+	( 
+		(
+			p = expression
+			{
+				params.add($p.node);
+			}
+		)
+		(
+			COMMA
+			p1 = expression
+			{
+				params.add($p1.node);
+			}
+		)*
+	)?
+	PAR_CLOSE
+	{
+		$node = new FunctionExecution($name.text, params);
+	}
+	;
 
 var_declaration returns [ASTNode node]:
 	LET ID 
@@ -154,6 +223,7 @@ println returns [ASTNode node]:
 	;
 
 
+
 condition returns [ASTNode node]:
 	c1 = condition_comparation {$node = $c1.node;}
 	(
@@ -192,7 +262,9 @@ expression returns [ASTNode node]:
 		MINUS t2 = factor {$node = new Subtraction($node, $t2.node);}
 	)*
 	|
-	MINUS terms {$node = new Subtraction(new Constant(0.0), $terms.node);}
+	MINUS terms {$node = new Subtraction(new Constant(0.0f), $terms.node);}
+	|
+	condition {$node=$condition.node}
 	; 
 
 
@@ -206,6 +278,16 @@ factor returns [ASTNode node]:
 	;
 	
 terms returns [ASTNode node]: 
+	PAR_OPEN expression PAR_CLOSE
+	{
+		$node = $expression.node;	
+	}
+	|
+	PAR_OPEN condition PAR_CLOSE
+	{
+		$node = $condition.node;
+	}
+	|
 	NUMBER {$node = new Constant(Float.parseFloat($NUMBER.text));}
 	|
 	BOOL {$node = new Constant(Boolean.parseBoolean($BOOL.text));}
@@ -269,6 +351,8 @@ ASSIGN: '=';
 
 PAR_OPEN: '(';
 PAR_CLOSE: ')';
+
+COLON: ':';
 
 COMMA: ',';
 

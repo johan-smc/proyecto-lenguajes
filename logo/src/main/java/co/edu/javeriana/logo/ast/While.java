@@ -3,6 +3,7 @@ package co.edu.javeriana.logo.ast;
 import java.util.List;
 
 import co.edu.javeriana.logo.Turtle;
+import utils.ListOfFunctions;
 import utils.SymbolTable;
 
 public class While implements ASTNode {
@@ -17,11 +18,11 @@ public class While implements ASTNode {
 	}
 	
 	@Override
-	public Object execute(Turtle turtle, SymbolTable symbolTable) {
+	public Object execute(Turtle turtle, SymbolTable symbolTable, ListOfFunctions listOfFunctions) throws Exception {
 		symbolTable.subirNivel();
-		while( (boolean)condition.execute(turtle, symbolTable) ) {
+		while( (boolean)condition.execute(turtle, symbolTable, listOfFunctions) ) {
 			for(ASTNode n: body){
-				n.execute(turtle, symbolTable);
+				n.execute(turtle, symbolTable, listOfFunctions);
 			}
 		}
 		symbolTable.bajarNivel();

@@ -3,6 +3,7 @@ package co.edu.javeriana.logo.ast;
 import java.util.Scanner;
 
 import co.edu.javeriana.logo.Turtle;
+import utils.ListOfFunctions;
 import utils.SymbolTable;
 
 public class Read implements ASTNode {
@@ -16,7 +17,7 @@ public class Read implements ASTNode {
 	}
 	
 	@Override
-	public Object execute(Turtle turtle, SymbolTable symbolTable) {
+	public Object execute(Turtle turtle, SymbolTable symbolTable, ListOfFunctions listOfFunctions) throws Exception {
 		
 		
 		Object var = sc.nextLine();

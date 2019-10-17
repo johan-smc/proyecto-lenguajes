@@ -3,6 +3,7 @@ package co.edu.javeriana.logo.ast;
 import java.util.List;
 
 import co.edu.javeriana.logo.Turtle;
+import utils.ListOfFunctions;
 import utils.SymbolTable;
 
 public class If implements ASTNode {
@@ -20,16 +21,16 @@ public class If implements ASTNode {
 	}
 	
 	@Override
-	public Object execute(Turtle turtle, SymbolTable symbolTable) {
+	public Object execute(Turtle turtle, SymbolTable symbolTable, ListOfFunctions listOfFunctions) throws Exception {
 		symbolTable.subirNivel();
-		if( (boolean)condition.execute(turtle, symbolTable) )
+		if( (boolean)condition.execute(turtle, symbolTable, listOfFunctions) )
 		{
 			for(ASTNode n: body){
-				n.execute(turtle, symbolTable);
+				n.execute(turtle, symbolTable, listOfFunctions);
 			}
 		}else{
 			for(ASTNode n: elseBody){
-				n.execute(turtle, symbolTable);
+				n.execute(turtle, symbolTable, listOfFunctions);
 			}
 		}
 		symbolTable.bajarNivel();

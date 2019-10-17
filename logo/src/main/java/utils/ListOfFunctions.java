@@ -3,6 +3,8 @@ package utils;
 import java.util.HashMap;
 import java.util.Map;
 
+import co.edu.javeriana.logo.ast.FunctionSignature;
+
 public class ListOfFunctions {
 	private Map<String, FunctionSignature> functions;
 	public ListOfFunctions() {
@@ -21,6 +23,10 @@ public class ListOfFunctions {
 	public Object get(String nombre)
 	{
 		return functions.get(nombre);
+	}
+	
+	public boolean exist(String nombre) {
+		return functions.containsKey(nombre);
 	}
 
 }
