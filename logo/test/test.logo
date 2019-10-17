@@ -1,3 +1,9 @@
+println 3 + 2 * (8-1)
+let negado = true
+println !negado
+
+
+
 def moveRotate(angle, dist):
 rot_r angle
 move_forw dist
@@ -28,6 +34,7 @@ moveRotate(45,50)
 moveRotate(45,50)
 moveRotate(45,50)
 moveRotate(45,50)
+
 
 
 

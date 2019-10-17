@@ -227,6 +227,11 @@ expression returns [ASTNode node]:
 	condition {$node = $condition.node;}
 	|
 	expression_value {$node = $expression_value.node;}
+	|
+	NOT condition 
+	{
+		$node = new Not($condition.node);
+	}
 	;
 
 
@@ -237,9 +242,6 @@ condition returns [ASTNode node]:
 		|
 		OR c2 = condition_comparation {$node = new Or($node, $c2.node);}
 	)*
-	|
-	NOT condition 
-	{$node = new Not($condition.node);}
 	;
 
 condition_comparation returns [ASTNode node]:
