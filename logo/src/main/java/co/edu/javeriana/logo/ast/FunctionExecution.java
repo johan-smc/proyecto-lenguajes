@@ -10,42 +10,42 @@ public class FunctionExecution implements ASTNode {
 
 	private String name;
 	private List<ASTNode> params;
-	
+
 	public FunctionExecution(String name, List<ASTNode> params) {
 		super();
 		this.name = name;
 		this.params = params;
 	}
-	
+
 	@Override
 	public Object execute(Turtle turtle, SymbolTable symbolTable, ListOfFunctions listOfFunctions) throws Exception {
-		FunctionSignature functionSignature = (FunctionSignature) listOfFunctions.get(this.name); 
-		
+		FunctionSignature functionSignature = (FunctionSignature) listOfFunctions.get(this.name);
+
 		symbolTable.subirNivel();
-		
-		
+
 		List<String> arguments = functionSignature.getArgumments();
-		if( arguments.size() != this.params.size() )
-		{
+		if (arguments.size() != this.params.size()) {
 			throw new Exception("Numero de argumentos invalido.");
 		}
-		
-		for( int i = 0; i < arguments.size() ; ++i )
-		{
-			symbolTable.create((String)arguments.get(i), this.params.get(i).execute(turtle, symbolTable, listOfFunctions));
+
+		for (int i = 0; i < arguments.size(); ++i) {
+			symbolTable.create((String) arguments.get(i),
+					this.params.get(i).execute(turtle, symbolTable, listOfFunctions));
 		}
-		
+
 		List<ASTNode> block = functionSignature.getBlock();
-		
-		for(ASTNode n: block){
-			n.execute(turtle, symbolTable, listOfFunctions);
+		Object obj = null;
+		for (ASTNode n : block) {
+
+			obj = n.execute(turtle, symbolTable, listOfFunctions);
+			if (obj != null) {
+				break;
+			}
 		}
-		
-		
+
 		symbolTable.bajarNivel();
-		
-		return null;
+
+		return obj;
 	}
-	
 
 }

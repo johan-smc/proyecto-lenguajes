@@ -62,8 +62,13 @@ sentence returns [ASTNode node]:
  	function_declaration {$node = $function_declaration.node;}
  	|
  	function_execution {$node = $function_execution.node;}
+ 	|
+ 	return_sentence {$node = $return_sentence.node;}
 	;
-
+return_sentence returns [ASTNode node]: 
+	RETURN expression
+	{$node = $expression.node;}
+;
 
 function_declaration returns [ASTNode node]:
 	DEF name=ID
@@ -232,6 +237,8 @@ expression returns [ASTNode node]:
 	{
 		$node = new Not($condition.node);
 	}
+	|
+	function_execution {$node = $function_execution.node;}
 	;
 
 
@@ -304,6 +311,8 @@ terms returns [ASTNode node]:
 	;
 
 
+//return
+RETURN: 'return';
 
 /// conditionals
 IF: 'if';

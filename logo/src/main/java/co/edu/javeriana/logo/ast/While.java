@@ -10,19 +10,24 @@ public class While implements ASTNode {
 
 	private ASTNode condition;
 	private List<ASTNode> body;
-	
+
 	public While(ASTNode condition, List<ASTNode> body) {
 		super();
 		this.condition = condition;
 		this.body = body;
 	}
-	
+
 	@Override
 	public Object execute(Turtle turtle, SymbolTable symbolTable, ListOfFunctions listOfFunctions) throws Exception {
 		symbolTable.subirNivel();
-		while( (boolean)condition.execute(turtle, symbolTable, listOfFunctions) ) {
-			for(ASTNode n: body){
-				n.execute(turtle, symbolTable, listOfFunctions);
+		Object obj = null;
+		while ((boolean) condition.execute(turtle, symbolTable, listOfFunctions)) {
+			for (ASTNode n : body) {
+				obj = n.execute(turtle, symbolTable, listOfFunctions);
+				if (obj != null) {
+					symbolTable.bajarNivel();
+					return obj;
+				}
 			}
 		}
 		symbolTable.bajarNivel();

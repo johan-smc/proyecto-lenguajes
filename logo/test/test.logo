@@ -15,7 +15,18 @@ println 1 == 1
 
 
 def moveRotate(angle, dist):
+let aiuda
+aiuda = "el bono"
+if angle < dist then 
+let auxAiuda
+auxAiuda = "No hay bono"
+return auxAiuda
+else
+return negado
+end_if
 rot_r angle
+println "aiuda"
+
 move_forw dist
 end_def
 def makeHorizontalLine():
@@ -39,8 +50,14 @@ end_if
 makeHorizontalLine()
 set_color 255,255,255,255
 rot_r 90
-move_forw 200
-moveRotate(45,50)
+let aiuda
+
+aiuda= moveRotate(45,50)
+println "vamos a imprimir aiuda"
+println aiuda
+let crack
+crack=moveRotate(51,50)
+println crack
 moveRotate(45,50)
 moveRotate(45,50)
 moveRotate(45,50)
